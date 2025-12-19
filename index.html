@@ -640,9 +640,108 @@
     }
 
     @media (max-width: 768px) {
-        .progress-steps { font-size: 0.85rem; }
-        .step-line { margin: 0 0.5rem; }
-        .step-label { display: none; }
+        .container {
+            padding: 1rem;
+        }
+
+        .header {
+            padding: 1rem;
+        }
+
+        .brand {
+            font-size: 1.25rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+        }
+
+        .progress-steps { 
+            font-size: 0.85rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .step-line { 
+            margin: 0 0.5rem;
+            min-width: 20px;
+        }
+
+        .step-label { 
+            display: none; 
+        }
+
+        .step-circle {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+        }
+
+        .grid-2, .grid-3 {
+            grid-template-columns: 1fr;
+        }
+
+        .card {
+            padding: 1.5rem;
+        }
+
+        .btn-group {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        #backBtn {
+            order: 2;
+        }
+
+        #nextBtn, #createBtn {
+            order: 1;
+        }
+
+        .wallet-info {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .dashboard-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stat-card-value {
+            font-size: 1.25rem;
+        }
+
+        .info-box {
+            padding: 1rem;
+        }
+
+        .info-box ul {
+            font-size: 0.9rem;
+        }
+
+        footer .grid-3 {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .dashboard-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .hamburger {
+            padding: 0.25rem;
+        }
+
+        .hamburger span {
+            width: 20px;
+        }
     }
 </style>
 ```
@@ -882,15 +981,38 @@
         <div class="info-box">
             <h3>
                 <i data-lucide="info"></i>
-                Integration Details
+                Why Choose IceiyLaunch?
             </h3>
             <ul>
-                <li><strong>Network:</strong> Devnet (for testing) - Switch to mainnet after testing</li>
-                <li><strong>Payment Wallet:</strong> DB9YZwXgNeQByab3bgJnJKrnYP7CtZGktrdnDRCLrKA3</li>
-                <li><strong>Raydium Fee:</strong> 0.2 SOL (includes platform fee)</li>
-                <li><strong>All fees are sent to the payment wallet address</strong></li>
-                <li><strong>Wallet Required:</strong> Install Phantom, Solflare, or compatible Solana wallet</li>
+                <li><strong>Lightning Fast:</strong> Create your token in minutes, not hours</li>
+                <li><strong>Secure & Trusted:</strong> Built on Solana's robust blockchain infrastructure</li>
+                <li><strong>Full Control:</strong> Manage token authorities and metadata with ease</li>
+                <li><strong>Instant Liquidity:</strong> Add Raydium pools directly from the platform</li>
+                <li><strong>Professional Metadata:</strong> IPFS-hosted images and comprehensive token information</li>
+                <li><strong>24/7 Support:</strong> Our team is always here to help you succeed</li>
             </ul>
+        </div>
+
+        <div class="card" style="margin-top: 1.5rem;">
+            <h3 style="margin-bottom: 1rem; color: #3b82f6;">Token Creation Benefits</h3>
+            <div class="grid grid-2">
+                <div style="padding: 1rem;">
+                    <h4 style="margin-bottom: 0.5rem;">🚀 Rapid Deployment</h4>
+                    <p style="color: #888; font-size: 0.9rem;">Launch your token on Solana mainnet within minutes. No coding knowledge required.</p>
+                </div>
+                <div style="padding: 1rem;">
+                    <h4 style="margin-bottom: 0.5rem;">🔒 Security First</h4>
+                    <p style="color: #888; font-size: 0.9rem;">Optional authority revocation ensures your token is trustworthy and transparent.</p>
+                </div>
+                <div style="padding: 1rem;">
+                    <h4 style="margin-bottom: 0.5rem;">💎 Professional Quality</h4>
+                    <p style="color: #888; font-size: 0.9rem;">Rich metadata with social links, descriptions, and IPFS-hosted imagery.</p>
+                </div>
+                <div style="padding: 1rem;">
+                    <h4 style="margin-bottom: 0.5rem;">📈 Built-in Liquidity</h4>
+                    <p style="color: #888; font-size: 0.9rem;">Seamlessly add Raydium liquidity pools to kickstart your token's trading.</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -971,6 +1093,20 @@
                 </div>
             </div>
         </div>
+
+        <div class="info-box">
+            <h3>
+                <i data-lucide="droplet"></i>
+                Understanding Liquidity Pools
+            </h3>
+            <ul>
+                <li><strong>Instant Trading:</strong> Liquidity pools enable immediate token swaps on Raydium DEX</li>
+                <li><strong>Earn Fees:</strong> As a liquidity provider, you earn a share of trading fees from your pool</li>
+                <li><strong>Price Discovery:</strong> Pools establish market prices through automated market making</li>
+                <li><strong>Boost Credibility:</strong> Listed pools increase token visibility and trader confidence</li>
+                <li><strong>Flexible Management:</strong> Add or withdraw liquidity anytime based on market conditions</li>
+            </ul>
+        </div>
     </div>
 
     <!-- Portfolio Page -->
@@ -1023,20 +1159,67 @@
                 </div>
             </div>
         </div>
+
+        <div class="info-box">
+            <h3>
+                <i data-lucide="trending-up"></i>
+                Maximize Your Token's Success
+            </h3>
+            <ul>
+                <li><strong>Build Community:</strong> Engage with holders through social channels listed in your token metadata</li>
+                <li><strong>Add Liquidity Early:</strong> Establish trading pairs quickly to enable seamless buying and selling</li>
+                <li><strong>Monitor Performance:</strong> Track your token's metrics and holder distribution regularly</li>
+                <li><strong>Stay Transparent:</strong> Revoked authorities build trust and attract more investors</li>
+                <li><strong>Marketing Matters:</strong> Use our trending service to boost your token's visibility</li>
+                <li><strong>Long-term Vision:</strong> Focus on utility and real value rather than short-term gains</li>
+            </ul>
+        </div>
     </div>
 </div>
+
+<!-- Footer -->
+<footer style="background: #111; border-top: 1px solid #222; padding: 3rem 2rem; margin-top: 4rem;">
+    <div class="container">
+        <div class="grid grid-3" style="margin-bottom: 2rem;">
+            <div>
+                <h3 style="color: #3b82f6; margin-bottom: 1rem;">IceiyLaunch</h3>
+                <p style="color: #888; line-height: 1.6;">The premier Solana token launcher. Create, launch, and manage your tokens with ease. Built for speed, security, and success.</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 1rem;">Quick Links</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="#" onclick="navigateTo('create')" style="color: #888; text-decoration: none;">Create Token</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#" onclick="navigateTo('liquidity')" style="color: #888; text-decoration: none;">Manage Liquidity</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="#" onclick="navigateTo('portfolio')" style="color: #888; text-decoration: none;">Portfolio</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="https://soltrndingding.zya.me" target="_blank" style="color: #888; text-decoration: none;">Get Trending</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 1rem;">Support</h4>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="https://t.me/IceiyLaunchSupport_Bot" target="_blank" style="color: #888; text-decoration: none;">Telegram Support</a></li>
+                    <li style="margin-bottom: 0.5rem;"><span style="color: #888;">Powered by Solana</span></li>
+                    <li style="margin-bottom: 0.5rem;"><span style="color: #888;">Integrated with Raydium</span></li>
+                </ul>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #222; padding-top: 2rem; text-align: center; color: #666;">
+            <p>&copy; 2024 IceiyLaunch. All rights reserved. Built on Solana blockchain.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem;">Create tokens responsibly. Always do your own research.</p>
+        </div>
+    </div>
+</footer>
 
 <script>
     // Initialize Lucide icons
     lucide.createIcons();
 
-    // Configuration
+    // Configuration - MAINNET MODE
     const CONFIG = {
-        RPC_ENDPOINT: 'https://api.devnet.solana.com',
-        // To switch to mainnet after testing:
-        // RPC_ENDPOINT: 'https://mainnet.helius-rpc.com/?api-key=f724fecf-158e-4a19-8726-5022aea22646',
+        RPC_ENDPOINT: 'https://mainnet.helius-rpc.com/?api-key=f724fecf-158e-4a19-8726-5022aea22646',
         PAYMENT_WALLET: 'DB9YZwXgNeQByab3bgJnJKrnYP7CtZGktrdnDRCLrKA3',
         NFT_STORAGE_API: 'd53093ba.6fde78937c704e309b666e9640bc5970',
+        NETWORK: 'mainnet-beta',
         FEES: {
             TOKEN_CREATION: 0.1,
             REVOKE_FREEZE: 0.1,
