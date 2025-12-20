@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IceiyLaunch - Solana Token Launcher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .hide { display: none; }
+        .gradient-text { background: linear-gradient(to right, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    </style>
+</head>
+<body class="bg-gray-950 text-white">
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 h-16 bg-gray-900 border-b border-gray-800 z-50 flex items-center justify-between px-4">
+        <div class="flex items-center gap-4">
+            <button id="menuBtn" class="p-2 hover:bg-gray-800 rounded-lg transition-colors">
+                <svg id="menuIcon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <svg id="closeIcon" class="hide" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <h1 class="text-xl font-bold gradient-text">IceiyLaunch</h1>
+        </div>
+        <button id="walletBtn" class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+            <span id="walletText">Connect Wallet</span>
+        </button>
+    </header>
+
+```
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed top-16 left-0 bottom-0 w-64 bg-gray-900 border-r border-gray-800 p-4 transition-transform -translate-x-full z-40">
+    <nav class="space-y-2">
+        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="create">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.6-1 5.2 2 5.2h12c3 0 3.5-3.6 2-5.2l-8-10.5z"></path></svg>
+            <span>Create Token</span>
+        </button>
+        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="liquidity">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+            <span>Manage Liquidity</span>
+        </button>
+        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="portfolio">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+            <span>Portfolio</span>
+        </button>
+        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="trending">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+            <span>Get Trending</span>
+        </button>
+        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="support">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg>
+            <span>Support</span>
+        </button>
+    </nav>
+</aside>
+
+<!-- Main Content -->
+<main class="pt-16 min-h-screen">
+    <div class="max-w-6xl mx-auto p-6">
+        
+        <!-- Create Token Page -->
+        <div id="createPage" class="page-content">
+            <h2 class="text-3xl font-bold mb-6">Create Token</h2>
+            
+            <!-- Progress Steps -->
+            <div class="flex items-center gap-2 mb-8">
+                <div id="step1Circle" class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-semibold">1</div>
+                <div id="step1Line" class="h-1 flex-1 bg-gray-800"></div>
+                <div id="step2Circle" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white font-semibold">2</div>
+                <div id="step2Line" class="h-1 flex-1 bg-gray-800"></div>
+                <div id="step3Circle" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white font-semibold">3</div>
+                <div id="step3Line" class="h-1 flex-1 bg-gray-800"></div>
+                <div id="step4Circle" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white font-semibold">4</div>
+            </div>
+
+            <!-- Step 1 -->
+            <div id="step1" class="bg-gray-900 rounded-xl p-6 space-y-4">
+                <h3 class="text-xl font-semibold mb-4">Basic Information</h3>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Token Name</label>
+                    <input type="text" id="tokenName" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="My Token">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Ticker Symbol</label>
+                    <input type="text" id="tokenTicker" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="MTK">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Token Image</label>
+                    <div class="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer">
+                        <svg class="mx-auto mb-2 text-gray-500" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        <p class="text-sm text-gray-400">Click or drag to upload image</p>
+                    </div>
+                </div>
+                <button id="nextStep1" class="w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2">
+                    Next
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </div>
+
+            <!-- Step 2 -->
+            <div id="step2" class="bg-gray-900 rounded-xl p-6 space-y-4 hide">
+                <h3 class="text-xl font-semibold mb-4">Token Details</h3>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Decimals</label>
+                    <input type="number" id="tokenDecimals" value="9" min="0" max="9" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Total Supply</label>
+                    <input type="text" id="tokenSupply" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="1000000000">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Description</label>
+                    <textarea id="tokenDescription" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 h-32 resize-none" placeholder="Describe your token..."></textarea>
+                </div>
+                <div class="flex gap-2">
+                    <button id="backStep2" class="flex-1 bg-gray-800 hover:bg-gray-700 rounded-lg px-6 py-3 font-semibold">Back</button>
+                    <button id="nextStep2" class="flex-1 bg-blue-600 hover:bg-blue-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2">
+                        Next
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div id="step3" class="bg-gray-900 rounded-xl p-6 space-y-4 hide">
+                <h3 class="text-xl font-semibold mb-4">Social Links (Optional)</h3>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Website</label>
+                    <input type="url" id="tokenWebsite" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="https://mytoken.com">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Twitter</label>
+                    <input type="text" id="tokenTwitter" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="@mytoken">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Telegram</label>
+                    <input type="text" id="tokenTelegram" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="t.me/mytoken">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Discord</label>
+                    <input type="text" id="tokenDiscord" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="discord.gg/mytoken">
+                </div>
+                <div class="flex gap-2">
+                    <button id="backStep3" class="flex-1 bg-gray-800 hover:bg-gray-700 rounded-lg px-6 py-3 font-semibold">Back</button>
+                    <button id="nextStep3" class="flex-1 bg-blue-600 hover:bg-blue-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2">
+                        Next
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div id="step4" class="bg-gray-900 rounded-xl p-6 space-y-4 hide">
+                <h3 class="text-xl font-semibold mb-4">Token Authorities</h3>
+                <div class="space-y-3">
+                    <label class="flex items-center justify-between p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
+                        <div>
+                            <div class="font-semibold">Revoke Freeze Authority</div>
+                            <div class="text-sm text-gray-400">Cost: 0.1 SOL</div>
+                        </div>
+                        <input type="checkbox" id="revokeFreeze" class="w-5 h-5">
+                    </label>
+                    <label class="flex items-center justify-between p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
+                        <div>
+                            <div class="font-semibold">Revoke Mint Authority</div>
+                            <div class="text-sm text-gray-400">Cost: 0.1 SOL</div>
+                        </div>
+                        <input type="checkbox" id="revokeMint" class="w-5 h-5">
+                    </label>
+                    <label class="flex items-center justify-between p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
+                        <div>
+                            <div class="font-semibold">Revoke Update Authority</div>
+                            <div class="text-sm text-gray-400">Cost: 0.1 SOL</div>
+                        </div>
+                        <input type="checkbox" id="revokeUpdate" class="w-5 h-5">
+                    </label>
+                    <label class="flex items-center justify-between p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
+                        <div>
+                            <div class="font-semibold">Modify Creator Information</div>
+                            <div class="text-sm text-gray-400">Change creator from LaunchToken | Cost: 0.1 SOL</div>
+                        </div>
+                        <input type="checkbox" id="modifyCreator" class="w-5 h-5">
+                    </label>
+                </div>
+                <div class="bg-blue-950 border border-blue-800 rounded-lg p-4 mt-6">
+                    <div class="flex items-center gap-2 text-blue-400 mb-2">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <span class="font-semibold">Total Cost</span>
+                    </div>
+                    <div id="totalCost" class="text-2xl font-bold">0.1 SOL</div>
+                    <div class="text-sm text-gray-400 mt-1">Base creation: 0.1 SOL</div>
+                </div>
+                <div class="flex gap-2 mt-6">
+                    <button id="backStep4" class="flex-1 bg-gray-800 hover:bg-gray-700 rounded-lg px-6 py-3 font-semibold">Back</button>
+                    <button id="createTokenBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.6-1 5.2 2 5.2h12c3 0 3.5-3.6 2-5.2l-8-10.5z"></path></svg>
+                        Create Token
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Liquidity Page -->
+        <div id="liquidityPage" class="page-content hide">
+            <h2 class="text-3xl font-bold mb-6">Manage Liquidity</h2>
+            
+            <div id="poolsContainer" class="bg-gray-900 rounded-xl p-6 mb-6 hide">
+                <h3 class="text-xl font-semibold mb-4">Your Liquidity Pools</h3>
+                <div id="poolsList" class="space-y-3"></div>
+            </div>
+
+            <div class="bg-gray-900 rounded-xl p-6 space-y-4">
+                <h3 class="text-xl font-semibold mb-4">Add Liquidity to Raydium</h3>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Select Token</label>
+                    <select id="liquidityTokenSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500">
+                        <option value="">Choose a token</option>
+                    </select>
+                </div>
+                <div id="liquidityInputContainer" class="hide">
+                    <label class="block text-sm text-gray-400 mb-2">SOL Amount</label>
+                    <input type="number" id="liquidityAmount" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="0.0" step="0.1">
+                </div>
+                <button id="addLiquidityBtn" class="w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2 hide">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Add Liquidity
+                </button>
+                <div id="noTokensMessage" class="text-center py-8 text-gray-400">
+                    <svg class="mx-auto mb-3 opacity-50" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                    <p>No tokens created yet. Create a token first!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Page -->
+        <div id="portfolioPage" class="page-content hide">
+            <h2 class="text-3xl font-bold mb-6">Portfolio</h2>
+            
+            <div id="walletInfo" class="bg-gradient-to-r from-blue-900 to-purple-900 rounded-xl p-6 mb-6 hide">
+                <div class="text-sm text-gray-300 mb-1">Wallet Address</div>
+                <div id="portfolioWallet" class="font-mono text-lg mb-4"></div>
+                <div class="text-sm text-gray-300 mb-1">Balance</div>
+                <div class="text-3xl font-bold">-- SOL</div>
+            </div>
+
+            <div class="bg-gray-900 rounded-xl p-6">
+                <h3 class="text-xl font-semibold mb-4">Your Tokens</h3>
+                <div id="tokensList" class="grid gap-4 md:grid-cols-2"></div>
+                <div id="noTokensPortfolio" class="text-center py-8 text-gray-400">
+                    <svg class="mx-auto mb-3 opacity-50" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                    <p>No tokens in your portfolio yet</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trending Page -->
+        <div id="trendingPage" class="page-content hide">
+            <h2 class="text-3xl font-bold mb-6">Get Trending</h2>
+            <div class="bg-gray-900 rounded-xl p-8 text-center">
+                <svg class="mx-auto mb-4 text-blue-500" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                <h3 class="text-xl font-semibold mb-4">Discover Trending Tokens</h3>
+                <p class="text-gray-400 mb-6">Check out the hottest tokens on Solana right now</p>
+                <a href="https://soltrndingding.zya.me" target="_blank" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">
+                    Visit Trending Page
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Support Page -->
+        <div id="supportPage" class="page-content hide">
+            <h2 class="text-3xl font-bold mb-6">Support</h2>
+            <div class="bg-gray-900 rounded-xl p-8 text-center">
+                <svg class="mx-auto mb-4 text-blue-500" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg>
+                <h3 class="text-xl font-semibold mb-4">Need Help?</h3>
+                <p class="text-gray-400 mb-6">Our support team is ready to assist you with any questions or issues</p>
+                <a href="https://t.me/IceiyLaunchSupport_Bot" target="_blank" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">
+                    Contact Support
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    const TREASURY_ADDRESS = 'DB9YZwXgNeQByab3bgJnJKrnYP7CtZGktrdnDRCLrKA3';
+    
+    let walletConnected = false;
+    let walletAddress = '';
+    let currentStep = 1;
+    let userTokens = [];
+    let userPools = [];
+
+    // Menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const menuIcon = document.getElementById('menuIcon');
+    const closeIcon = document.getElementById('closeIcon');
+
+    menuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('-translate-x-full');
+        menuIcon.classList.toggle('hide');
+        closeIcon.classList.toggle('hide');
+    });
+
+    // Wallet connection
+    const walletBtn = document.getElementById('walletBtn');
+    const walletText = document.getElementById('walletText');
+
+    walletBtn.addEventListener('click', async () => {
+        if (!walletConnected) {
+            if (typeof window.solana !== 'undefined') {
+                try {
+                    const resp = await window.solana.connect();
+                    walletAddress = resp.publicKey.toString();
+                    walletConnected = true;
+                    walletText.textContent = `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`;
+                    updatePortfolioWallet();
+                } catch (err) {
+                    alert('Failed to connect wallet. Please try again.');
+                }
+            } else {
+                alert('Please install a Solana wallet (Phantom, Solflare, etc.)');
+            }
+        } else {
+            walletConnected = false;
+            walletAddress = '';
+            walletText.textContent = 'Connect Wallet';
+            document.getElementById('walletInfo').classList.add('hide');
+        }
+    });
+
+    // Navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = document.querySelectorAll('.page-content');
+
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const page = item.dataset.page;
+            
+            navItems.forEach(n => {
+                n.classList.remove('bg-blue-600', 'text-white');
+                n.classList.add('text-gray-300', 'hover:bg-gray-800');
+            });
+            item.classList.add('bg-blue-600', 'text-white');
+            item.classList.remove('text-gray-300', 'hover:bg-gray-800');
+            
+            pages.forEach(p => p.classList.add('hide'));
+            document.getElementById(`${page}Page`).classList.remove('hide');
+            
+            sidebar.classList.add('-translate-x-full');
+            menuIcon.classList.remove('hide');
+            closeIcon.classList.add('hide');
+
+            if (page === 'portfolio') {
+                updatePortfolio();
+            } else if (page === 'liquidity') {
+                updateLiquidityPage();
+            }
+        });
+    });
+
+    // Step navigation
+    function goToStep(step) {
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById(`step${i}`).classList.add('hide');
+            const circle = document.getElementById(`step${i}Circle`);
+            if (i < step) {
+                circle.innerHTML = '<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                circle.classList.add('bg-blue-600');
+                circle.classList.remove('bg-gray-800');
+                if (i < 4) document.getElementById(`step${i}Line`).classList.add('bg-blue-600');
+            } else if (i === step) {
+                circle.textContent = i;
+                circle.classList.add('bg-blue-600');
+                circle.classList.remove('bg-gray-800');
+            } else {
+                circle.textContent = i;
+                circle.classList.add('bg-gray-800');
+                circle.classList.remove('bg-blue-600');
+                if (i < 4) document.getElementById(`step${i}Line`).classList.remove('bg-blue-600');
+            }
+        }
+        document.getElementById(`step${step}`).classList.remove('hide');
+        currentStep = step;
+    }
+
+    document.getElementById('nextStep1').addEventListener('click', () => {
+        const name = document.getElementById('tokenName').value;
+        const ticker = document.getElementById('tokenTicker').value;
+        if (name && ticker) goToStep(2);
+    });
+
+    document.getElementById('backStep2').addEventListener('click', () => goToStep(1));
+    document.getElementById('nextStep2').addEventListener('click', () => {
+        const supply = document.getElementById('tokenSupply').value;
+        if (supply) goToStep(3);
+    });
+
+    document.getElementById('backStep3').addEventListener('click', () => goToStep(2));
+    document.getElementById('nextStep3').addEventListener('click', () => goToStep(4));
+    document.getElementById('backStep4').addEventListener('click', () => goToStep(3));
+
+    // Calculate total cost
+    function updateTotalCost() {
+        let cost = 0.1;
+        if (document.getElementById('revokeFreeze').checked) cost += 0.1;
+        if (document.getElementById('revokeMint').checked) cost += 0.1;
+        if (document.getElementById('revokeUpdate').checked) cost += 0.1;
+        if (document.getElementById('modifyCreator').checked) cost += 0.1;
+        document.getElementById('totalCost').textContent = `${cost} SOL`;
+        return cost;
+    }
+
+    ['revokeFreeze', 'revokeMint', 'revokeUpdate', 'modifyCreator'].forEach(id => {
+        document.getElementById(id).addEventListener('change', updateTotalCost);
+    });
+
+    // Create transaction
+    async function createTransaction(amount) {
+        if (!walletConnected) {
+            alert('Please connect your wallet first');
+            return false;
+        }
+        
+        alert(`Transaction created: ${amount} SOL to ${TREASURY_ADDRESS}\n\nIn a real implementation, this would create an actual Solana transaction for user approval.`);
+        return true;
+    }
+
+    // Create token
+    document.getElementById('createTokenBtn').addEventListener('click', async () => {
+        const totalCost = updateTotalCost();
+        const success = await createTransaction(totalCost);
+        
+        if (success) {
+            const newToken = {
+                id: Date.now(),
+                name: document.getElementById('tokenName').value,
+                ticker: document.getElementById('tokenTicker').value,
+                decimals: document.getElementById('tokenDecimals').value,
+                supply: document.getElementById('tokenSupply').value,
+                description: document.getElementById('tokenDescription').value,
+                website: document.getElementById('tokenWebsite').value,
+                twitter: document.getElementById('tokenTwitter').value,
+                telegram: document.getElementById('tokenTelegram').value,
+                discord: document.getElementById('tokenDiscord').value,
+                address: `${document.getElementById('tokenTicker').value}${Math.random().toString(36).substr(2, 9)}`,
+                hasLiquidity: false,
+                created: new Date().toISOString()
+            };
+            
+            userTokens.push(newToken);
+            alert('Token created successfully!');
+            
+            // Reset form
+            document.getElementById('tokenName').value = '';
+            document.getElementById('tokenTicker').value = '';
+            document.getElementById('tokenSupply').value = '';
+            document.getElementById('tokenDescription').value = '';
+            document.getElementById('tokenWebsite').value = '';
+            document.getElementById('tokenTwitter').value = '';
+            document.getElementById('tokenTelegram').value = '';
+            document.getElementById('tokenDiscord').value = '';
+            document.getElementById('revokeFreeze').checked = false;
+            document.getElementById('revokeMint').checked = false;
+            document.getElementById('revokeUpdate').checked = false;
+            document.getElementById('modifyCreator').checked = false;
+            
+            goToStep(1);
+            
+            // Navigate to portfolio
+            navItems[2].click();
+        }
+    });
+
+    // Update portfolio
+    function updatePortfolioWallet() {
+        if (walletConnected) {
+            document.getElementById('walletInfo').classList.remove('hide');
+            document.getElementById('portfolioWallet').textContent = walletAddress;
+        }
+    }
+
+    function updatePortfolio() {
+        updatePortfolioWallet();
+        
+        const tokensList = document.getElementById('tokensList');
+        const noTokensMsg = document.getElementById('noTokensPortfolio');
+        
+        if (userTokens.length === 0) {
+            tokensList.innerHTML = '';
+            noTokensMsg.classList.remove('hide');
+        } else {
+            noTokensMsg.classList.add('hide');
+            tokensList.innerHTML = userTokens.map(token => `
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <div class="font-semibold text-lg">${token.name}</div>
+                            <div class="text-gray-400">${token.ticker}</div>
+                        </div>
+                        ${token.hasLiquidity ? '<span class="bg-green-600 text-xs px-2 py-1 rounded">Liquidity Added</span>' : ''}
+                    </div>
+                    <div class="text-sm text-gray-400 mb-2">Supply: ${parseInt(token.supply).toLocaleString()}</div>
+                    <div class="text-xs text-gray-500 font-mono truncate">${token.address}</div>
+                </div>
+            `).join('');
+        }
+    }
+
+    // Update liquidity page
+    function updateLiquidityPage() {
+        const select = document.getElementById('liquidityTokenSelect');
+        const noTokensMsg = document.getElementById('noTokensMessage');
+        const inputContainer = document.getElementById('liquidityInputContainer');
+        const addBtn = document.getElementById('addLiquidityBtn');
+        
+        select.innerHTML = '<option value="">Choose a token</option>';
+        
+        if (userTokens.length === 0) {
+            noTokensMsg.classList.remove('hide');
+            inputContainer.classList.add('hide');
+            addBtn.classList.add('hide');
+        } else {
+            noTokensMsg.classList.add('hide');
+            userTokens.forEach(token => {
+                const option = document.createElement('option');
+                option.value = token.id;
+                option.textContent = `${token.name} (${token.ticker})`;
+                select.appendChild(option);
+            });
+        }
+        
+        // Update pools display
+        if (userPools.length > 0) {
+            document.getElementById('poolsContainer').classList.remove('hide');
+            document.getElementById('poolsList').innerHTML = userPools.map(pool => `
+                <div class="bg-gray-800 rounded-lg p-4 flex items-center justify-between">
+                    <div>
+                        <div class="font-semibold">${pool.tokenName} (${pool.tokenTicker})</div>
+                        <div class="text-sm text-gray-400">${pool.solAmount} SOL</div>
+                    </div>
+                    <button onclick="withdrawLiquidity(${pool.id})" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg flex items-center gap-2">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Withdraw
+                    </button>
+                </div>
+            `).join('');
+        } else {
+            document.getElementById('poolsContainer').classList.add('hide');
+        }
+    }
+
+    // Token selection for liquidity
+    document.getElementById('liquidityTokenSelect').addEventListener('change', (e) => {
+        const inputContainer = document.getElementById('liquidityInputContainer');
+        const addBtn = document.getElementById('addLiquidityBtn');
+        
+        if (e.target.value) {
+            inputContainer.classList.remove('hide');
+            addBtn.classList.remove('hide');
+        } else {
+            inputContainer.classList.add('hide');
+            addBtn.classList.add('hide');
+        }
+    });
+
+    // Add liquidity
+    document.getElementById('addLiquidityBtn').addEventListener('click', async () => {
+        const tokenId = parseInt(document.getElementById('liquidityTokenSelect').value);
+        const amount = parseFloat(document.getElementById('liquidityAmount').value);
+        
+        if (!tokenId || !amount || amount <= 0) {
+            alert('Please select a token and enter a valid amount');
+            return;
+        }
+        
+        const token = userTokens.find(t => t.id === tokenId);
+        const success = await createTransaction(amount);
+        
+        if (success) {
+            const newPool = {
+                id: Date.now(),
+                tokenId: token.id,
+                tokenName: token.name,
+                tokenTicker: token.ticker,
+                solAmount: amount,
+                created: new Date().toISOString()
+            };
+            
+            userPools.push(newPool);
+            
+            userTokens = userTokens.map(t => 
+                t.id === tokenId ? { ...t, hasLiquidity: true } : t
+            );
+            
+            alert('Liquidity added successfully!');
+            document.getElementById('liquidityTokenSelect').value = '';
+            document.getElementById('liquidityAmount').value = '';
+            updateLiquidityPage();
+        }
+    });
+
+    // Withdraw liquidity
+    function withdrawLiquidity(poolId) {
+        const pool = userPools.find(p => p.id === poolId);
+        if (!pool) return;
+        
+        if (confirm(`Withdraw ${pool.solAmount} SOL from ${pool.tokenName} pool?`)) {
+            userPools = userPools.filter(p => p.id !== poolId);
+            alert('Liquidity withdrawn successfully!');
+            updateLiquidityPage();
+        }
+    }
+</script>
+```
+
+</body>
+</html>
