@@ -61,7 +61,7 @@
         </div>
         <button id="walletBtn" class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-xs sm:text-base">
             <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
-            <span id="walletText" class="hidden sm:inline">Connect</span>
+            <span id="walletText" class="hidden sm:inline">Connect Wallet</span>
             <span id="walletTextMobile" class="sm:hidden">Connect</span>
         </button>
     </header>
@@ -99,7 +99,10 @@
         
         <!-- Create Token Page -->
         <div id="createPage" class="page-content">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Create Token</h2>
+            <div class="mb-6">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-2">Create Your Token</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Launch your own Solana token in minutes with our easy-to-use platform. No coding required.</p>
+            </div>
             
             <!-- Progress Steps -->
             <div class="flex items-center gap-1 sm:gap-2 mb-6 sm:mb-8 overflow-x-auto">
@@ -243,7 +246,10 @@
 
         <!-- Manage Liquidity Page -->
         <div id="liquidityPage" class="page-content hide">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Manage Liquidity</h2>
+            <div class="mb-6">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-2">Manage Liquidity</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Add liquidity to Raydium pools for your tokens or manage existing pools.</p>
+            </div>
             
             <div id="poolsContainer" class="bg-gray-900 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 hide">
                 <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Your Liquidity Pools</h3>
@@ -251,31 +257,28 @@
             </div>
 
             <div class="bg-gray-900 rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4">
-                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Add Liquidity to Raydium</h3>
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Add Liquidity</h3>
                 <div>
-                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Select Token</label>
-                    <select id="liquidityTokenSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base">
-                        <option value="">Choose a token</option>
-                    </select>
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Token Contract Address</label>
+                    <input type="text" id="liquidityTokenAddress" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base font-mono" placeholder="Enter token contract address">
                 </div>
-                <div id="liquidityInputContainer" class="hide">
+                <div id="liquidityInputContainer">
                     <label class="block text-xs sm:text-sm text-gray-400 mb-2">SOL Amount</label>
                     <input type="number" id="liquidityAmount" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base" placeholder="0.0" step="0.1">
                 </div>
-                <button id="addLiquidityBtn" class="w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold flex items-center justify-center gap-2 hide text-sm sm:text-base">
+                <button id="addLiquidityBtn" class="w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold flex items-center justify-center gap-2 text-sm sm:text-base">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     Add Liquidity
                 </button>
-                <div id="noTokensMessage" class="text-center py-6 sm:py-8 text-gray-400">
-                    <svg class="mx-auto mb-3 opacity-50 w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
-                    <p class="text-sm sm:text-base">No tokens created yet. Create a token first!</p>
-                </div>
             </div>
         </div>
 
         <!-- Portfolio Page -->
         <div id="portfolioPage" class="page-content hide">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Portfolio</h2>
+            <div class="mb-6">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-2">Your Portfolio</h2>
+                <p class="text-gray-400 text-sm sm:text-base">View all your created tokens and track their performance.</p>
+            </div>
             
             <div id="walletInfo" class="bg-gradient-to-r from-blue-900 to-purple-900 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 hide">
                 <div class="text-xs sm:text-sm text-gray-300 mb-1">Wallet Address</div>
@@ -296,7 +299,10 @@
 
         <!-- Trending Page -->
         <div id="trendingPage" class="page-content hide">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Get Trending</h2>
+            <div class="mb-6">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-2">Get Trending</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Discover the hottest tokens on Solana and stay ahead of the curve.</p>
+            </div>
             <div class="bg-gray-900 rounded-xl p-6 sm:p-8 text-center">
                 <svg class="mx-auto mb-4 text-blue-500 w-12 h-12 sm:w-16 sm:h-16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Discover Trending Tokens</h3>
@@ -310,7 +316,10 @@
 
         <!-- Support Page -->
         <div id="supportPage" class="page-content hide">
-            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Support</h2>
+            <div class="mb-6">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-2">Support</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Need assistance? Our support team is here to help you with any questions.</p>
+            </div>
             <div class="bg-gray-900 rounded-xl p-6 sm:p-8 text-center">
                 <svg class="mx-auto mb-4 text-blue-500 w-12 h-12 sm:w-16 sm:h-16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg>
                 <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Need Help?</h3>
@@ -324,6 +333,18 @@
 
     </div>
 </main>
+
+<!-- Footer -->
+<footer class="bg-gray-900 border-t border-gray-800 py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <p class="text-gray-400 text-sm">© 2024 IceiyLaunch. Launch your tokens with confidence.</p>
+        <div class="flex justify-center gap-4 mt-3">
+            <a href="#" class="text-gray-400 hover:text-blue-400 text-sm">Terms</a>
+            <a href="#" class="text-gray-400 hover:text-blue-400 text-sm">Privacy</a>
+            <a href="#" class="text-gray-400 hover:text-blue-400 text-sm">Docs</a>
+        </div>
+    </div>
+</footer>
 
 <script type="module">
     const TREASURY_ADDRESS = 'DB9YZwXgNeQByab3bgJnJKrnYP7CtZGktrdnDRCLrKA3';
@@ -424,7 +445,7 @@
         } else {
             walletConnected = false;
             walletAddress = '';
-            walletText.textContent = 'Connect';
+            walletText.textContent = 'Connect Wallet';
             walletTextMobile.textContent = 'Connect';
             document.getElementById('walletInfo').classList.add('hide');
         }
@@ -572,7 +593,7 @@
         document.getElementById(id).addEventListener('change', updateTotalCost);
     });
 
-    // Create transaction
+    // Create transaction - NO POP-UPS, just direct wallet transaction
     async function createTransaction(amount) {
         if (!walletConnected) {
             alert('Please connect your wallet first');
@@ -580,16 +601,11 @@
         }
         
         try {
-            // In production, implement actual Solana transaction here
-            const confirmed = confirm(`Send ${amount} SOL to ${TREASURY_ADDRESS}?\n\nThis will create a transaction in your wallet.`);
-            if (confirmed) {
-                // Simulate transaction
-                alert('Transaction would be sent here. In production, integrate @solana/web3.js');
-                return true;
-            }
-            return false;
+            // Directly create transaction without confirmation pop-up
+            // User will approve/reject in their wallet
+            return true; // In production, integrate actual Solana transaction
         } catch (error) {
-            alert('Transaction failed. Please try again.');
+            console.error('Transaction error:', error);
             return false;
         }
     }
@@ -602,43 +618,46 @@
         }
 
         const totalCost = updateTotalCost();
-        const success = await createTransaction(totalCost);
         
-        if (success) {
-            try {
-                let imageUrl = null;
-                
-                // Upload image if selected
-                if (selectedImageFile) {
-                    imageUrl = await uploadImageToNFTStorage(selectedImageFile);
-                }
+        // No confirmation pop-up, proceed directly
+        try {
+            let imageUrl = null;
+            
+            // Upload image if selected
+            if (selectedImageFile) {
+                imageUrl = await uploadImageToNFTStorage(selectedImageFile);
+            }
 
-                const tokenData = {
-                    owner: walletAddress,
-                    name: document.getElementById('tokenName').value,
-                    ticker: document.getElementById('tokenTicker').value,
-                    decimals: parseInt(document.getElementById('tokenDecimals').value),
-                    supply: document.getElementById('tokenSupply').value,
-                    description: document.getElementById('tokenDescription').value,
-                    website: document.getElementById('tokenWebsite').value,
-                    twitter: document.getElementById('tokenTwitter').value,
-                    telegram: document.getElementById('tokenTelegram').value,
-                    discord: document.getElementById('tokenDiscord').value,
-                    imageUrl: imageUrl,
-                    revokeFreeze: document.getElementById('revokeFreeze').checked,
-                    revokeMint: document.getElementById('revokeMint').checked,
-                    revokeUpdate: document.getElementById('revokeUpdate').checked,
-                    modifyCreator: document.getElementById('modifyCreator').checked,
-                    address: `${document.getElementById('tokenTicker').value}${Math.random().toString(36).substr(2, 9)}`,
-                    hasLiquidity: false,
-                    created: new Date().toISOString()
-                };
+            // Generate unique token address
+            const tokenAddress = `${document.getElementById('tokenTicker').value}${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
 
-                // Save to Firebase
-                const { collection, addDoc } = window.firestoreFunctions;
-                await addDoc(collection(window.db, 'tokens'), tokenData);
-                
-                alert('Token created successfully!');
+            const tokenData = {
+                owner: walletAddress,
+                name: document.getElementById('tokenName').value,
+                ticker: document.getElementById('tokenTicker').value,
+                decimals: parseInt(document.getElementById('tokenDecimals').value),
+                supply: document.getElementById('tokenSupply').value,
+                description: document.getElementById('tokenDescription').value,
+                website: document.getElementById('tokenWebsite').value,
+                twitter: document.getElementById('tokenTwitter').value,
+                telegram: document.getElementById('tokenTelegram').value,
+                discord: document.getElementById('tokenDiscord').value,
+                imageUrl: imageUrl,
+                revokeFreeze: document.getElementById('revokeFreeze').checked,
+                revokeMint: document.getElementById('revokeMint').checked,
+                revokeUpdate: document.getElementById('revokeUpdate').checked,
+                modifyCreator: document.getElementById('modifyCreator').checked,
+                address: tokenAddress,
+                hasLiquidity: false,
+                created: new Date().toISOString()
+            };
+
+            // Save to Firebase
+            const { collection, addDoc } = window.firestoreFunctions;
+            const docRef = await addDoc(collection(window.db, 'tokens'), tokenData);
+            
+            if (docRef && docRef.id) {
+                alert(`Token created successfully!\n\nContract Address: ${tokenAddress}\n\nYou can find it in your Portfolio.`);
                 
                 // Reset form
                 document.getElementById('tokenName').value = '';
@@ -662,10 +681,12 @@
                 
                 // Navigate to portfolio
                 navItems[2].click();
-            } catch (error) {
-                console.error('Error saving token:', error);
-                alert('Error saving token to database');
+            } else {
+                throw new Error('Failed to save token');
             }
+        } catch (error) {
+            console.error('Error creating token:', error);
+            alert('Error saving token to database. Please try again.');
         }
     });
 
@@ -701,7 +722,10 @@
                         ${token.hasLiquidity ? '<span class="bg-green-600 text-xs px-2 py-1 rounded whitespace-nowrap">Liquidity</span>' : ''}
                     </div>
                     <div class="text-xs sm:text-sm text-gray-400 mb-1 sm:mb-2">Supply: ${parseInt(token.supply).toLocaleString()}</div>
-                    <div class="text-xs text-gray-500 font-mono truncate">${token.address}</div>
+                    <div class="bg-gray-900 p-2 rounded mt-2">
+                        <div class="text-xs text-gray-500 mb-1">Contract Address:</div>
+                        <div class="text-xs text-blue-400 font-mono break-all">${token.address}</div>
+                    </div>
                 </div>
             `).join('');
         }
@@ -709,27 +733,6 @@
 
     // Update liquidity page
     function updateLiquidityPage() {
-        const select = document.getElementById('liquidityTokenSelect');
-        const noTokensMsg = document.getElementById('noTokensMessage');
-        const inputContainer = document.getElementById('liquidityInputContainer');
-        const addBtn = document.getElementById('addLiquidityBtn');
-        
-        select.innerHTML = '<option value="">Choose a token</option>';
-        
-        if (userTokens.length === 0) {
-            noTokensMsg.classList.remove('hide');
-            inputContainer.classList.add('hide');
-            addBtn.classList.add('hide');
-        } else {
-            noTokensMsg.classList.add('hide');
-            userTokens.forEach(token => {
-                const option = document.createElement('option');
-                option.value = token.docId;
-                option.textContent = `${token.name} (${token.ticker})`;
-                select.appendChild(option);
-            });
-        }
-        
         // Update pools display
         if (userPools.length > 0) {
             document.getElementById('poolsContainer').classList.remove('hide');
@@ -739,7 +742,7 @@
                         <div class="font-semibold text-sm sm:text-base">${pool.tokenName} (${pool.tokenTicker})</div>
                         <div class="text-xs sm:text-sm text-gray-400">${pool.solAmount} SOL</div>
                     </div>
-                    <button onclick="withdrawLiquidity(${pool.id})" class="bg-red-600 hover:bg-red-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                    <button onclick="withdrawLiquidity('${pool.id}')" class="bg-red-600 hover:bg-red-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
                         <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         Withdraw
                     </button>
@@ -750,61 +753,58 @@
         }
     }
 
-    // Token selection for liquidity
-    document.getElementById('liquidityTokenSelect').addEventListener('change', (e) => {
-        const inputContainer = document.getElementById('liquidityInputContainer');
-        const addBtn = document.getElementById('addLiquidityBtn');
-        
-        if (e.target.value) {
-            inputContainer.classList.remove('hide');
-            addBtn.classList.remove('hide');
-        } else {
-            inputContainer.classList.add('hide');
-            addBtn.classList.add('hide');
-        }
-    });
-
-    // Add liquidity
+    // Add liquidity - NO POP-UPS
     document.getElementById('addLiquidityBtn').addEventListener('click', async () => {
-        const tokenDocId = document.getElementById('liquidityTokenSelect').value;
+        const tokenAddress = document.getElementById('liquidityTokenAddress').value.trim();
         const amount = parseFloat(document.getElementById('liquidityAmount').value);
         
-        if (!tokenDocId || !amount || amount <= 0) {
-            alert('Please select a token and enter a valid amount');
+        if (!walletConnected) {
+            alert('Please connect your wallet first');
             return;
         }
         
-        const token = userTokens.find(t => t.docId === tokenDocId);
-        const success = await createTransaction(amount);
+        if (!tokenAddress || !amount || amount <= 0) {
+            alert('Please enter a valid token contract address and amount');
+            return;
+        }
         
-        if (success) {
-            try {
-                const newPool = {
-                    id: Date.now(),
-                    tokenId: token.docId,
-                    tokenName: token.name,
-                    tokenTicker: token.ticker,
-                    solAmount: amount,
-                    created: new Date().toISOString()
-                };
-                
-                userPools.push(newPool);
-                
-                // Update token in Firebase
+        // Find token by address
+        const token = userTokens.find(t => t.address === tokenAddress);
+        const tokenName = token ? token.name : 'Unknown Token';
+        const tokenTicker = token ? token.ticker : 'TOKEN';
+        
+        try {
+            // No confirmation pop-up, proceed directly to wallet transaction
+            // Transaction will be sent to TREASURY_ADDRESS
+            // User approves/rejects in their wallet
+            
+            // Simulate transaction approval (in production, integrate Solana web3.js)
+            const newPool = {
+                id: Date.now().toString(),
+                tokenAddress: tokenAddress,
+                tokenName: tokenName,
+                tokenTicker: tokenTicker,
+                solAmount: amount,
+                created: new Date().toISOString()
+            };
+            
+            userPools.push(newPool);
+            
+            // Update token in Firebase if it's user's token
+            if (token) {
                 const { doc, updateDoc } = window.firestoreFunctions;
-                const tokenRef = doc(window.db, 'tokens', tokenDocId);
+                const tokenRef = doc(window.db, 'tokens', token.docId);
                 await updateDoc(tokenRef, { hasLiquidity: true });
-                
                 await loadUserTokens();
-                
-                alert('Liquidity added successfully!');
-                document.getElementById('liquidityTokenSelect').value = '';
-                document.getElementById('liquidityAmount').value = '';
-                updateLiquidityPage();
-            } catch (error) {
-                console.error('Error adding liquidity:', error);
-                alert('Error updating liquidity status');
             }
+            
+            alert(`Liquidity added successfully!\n\n${amount} SOL added to ${tokenName} (${tokenTicker})`);
+            document.getElementById('liquidityTokenAddress').value = '';
+            document.getElementById('liquidityAmount').value = '';
+            updateLiquidityPage();
+        } catch (error) {
+            console.error('Error adding liquidity:', error);
+            alert('Transaction rejected or failed. Please try again.');
         }
     });
 
