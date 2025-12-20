@@ -6,196 +6,235 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IceiyLaunch - Solana Token Launcher</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        .hide { display: none; }
-        .gradient-text { background: linear-gradient(to right, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    </style>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, query, where, getDocs, updateDoc, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
+
+```
+    const firebaseConfig = {
+        apiKey: "AIzaSyB9Xw590-mWDeotdw5x0Cb3I7ZRZOhBiRE",
+        authDomain: "iceiylaunch.firebaseapp.com",
+        projectId: "iceiylaunch",
+        storageBucket: "iceiylaunch.firebasestorage.app",
+        messagingSenderId: "496317870204",
+        appId: "1:496317870204:web:40deb9bba97226b6c9d9f9",
+        measurementId: "G-DG3B27R5YY"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const analytics = getAnalytics(app);
+
+    window.db = db;
+    window.firestoreFunctions = { collection, addDoc, query, where, getDocs, updateDoc, doc, deleteDoc };
+</script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        overflow-x: hidden;
+    }
+    .hide { display: none !important; }
+    .gradient-text { 
+        background: linear-gradient(to right, #60a5fa, #a78bfa); 
+        -webkit-background-clip: text; 
+        -webkit-text-fill-color: transparent; 
+        background-clip: text; 
+    }
+    @media (max-width: 768px) {
+        .sidebar-open { transform: translateX(0) !important; }
+    }
+</style>
+```
+
 </head>
 <body class="bg-gray-950 text-white">
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 h-16 bg-gray-900 border-b border-gray-800 z-50 flex items-center justify-between px-4">
-        <div class="flex items-center gap-4">
+    <header class="fixed top-0 left-0 right-0 h-14 sm:h-16 bg-gray-900 border-b border-gray-800 z-50 flex items-center justify-between px-3 sm:px-4">
+        <div class="flex items-center gap-2 sm:gap-4">
             <button id="menuBtn" class="p-2 hover:bg-gray-800 rounded-lg transition-colors">
-                <svg id="menuIcon" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                <svg id="closeIcon" class="hide" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                <svg id="menuIcon" class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <svg id="closeIcon" class="hide w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            <h1 class="text-xl font-bold gradient-text">IceiyLaunch</h1>
+            <h1 class="text-base sm:text-xl font-bold gradient-text">IceiyLaunch</h1>
         </div>
-        <button id="walletBtn" class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
-            <span id="walletText">Connect Wallet</span>
+        <button id="walletBtn" class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-xs sm:text-base">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+            <span id="walletText" class="hidden sm:inline">Connect</span>
+            <span id="walletTextMobile" class="sm:hidden">Connect</span>
         </button>
     </header>
 
 ```
 <!-- Sidebar -->
-<aside id="sidebar" class="fixed top-16 left-0 bottom-0 w-64 bg-gray-900 border-r border-gray-800 p-4 transition-transform -translate-x-full z-40">
-    <nav class="space-y-2">
-        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="create">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.6-1 5.2 2 5.2h12c3 0 3.5-3.6 2-5.2l-8-10.5z"></path></svg>
+<aside id="sidebar" class="fixed top-14 sm:top-16 left-0 bottom-0 w-56 sm:w-64 bg-gray-900 border-r border-gray-800 p-3 sm:p-4 transition-transform -translate-x-full z-40">
+    <nav class="space-y-1 sm:space-y-2">
+        <button class="nav-item w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800 text-sm sm:text-base" data-page="create">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.6-1 5.2 2 5.2h12c3 0 3.5-3.6 2-5.2l-8-10.5z"></path></svg>
             <span>Create Token</span>
         </button>
-        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="liquidity">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+        <button class="nav-item w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800 text-sm sm:text-base" data-page="liquidity">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
             <span>Manage Liquidity</span>
         </button>
-        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="portfolio">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+        <button class="nav-item w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800 text-sm sm:text-base" data-page="portfolio">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
             <span>Portfolio</span>
         </button>
-        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="trending">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+        <button class="nav-item w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800 text-sm sm:text-base" data-page="trending">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
             <span>Get Trending</span>
         </button>
-        <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800" data-page="support">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg>
+        <button class="nav-item w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-colors text-gray-300 hover:bg-gray-800 text-sm sm:text-base" data-page="support">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg>
             <span>Support</span>
         </button>
     </nav>
 </aside>
 
 <!-- Main Content -->
-<main class="pt-16 min-h-screen">
-    <div class="max-w-6xl mx-auto p-6">
+<main class="pt-14 sm:pt-16 min-h-screen">
+    <div class="max-w-7xl mx-auto p-3 sm:p-4 md:p-6">
         
         <!-- Create Token Page -->
         <div id="createPage" class="page-content">
-            <h2 class="text-3xl font-bold mb-6">Create Token</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Create Token</h2>
             
             <!-- Progress Steps -->
-            <div class="flex items-center gap-2 mb-8">
-                <div id="step1Circle" class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 text-white font-semibold">1</div>
-                <div id="step1Line" class="h-1 flex-1 bg-gray-800"></div>
-                <div id="step2Circle" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white font-semibold">2</div>
-                <div id="step2Line" class="h-1 flex-1 bg-gray-800"></div>
-                <div id="step3Circle" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white font-semibold">3</div>
-                <div id="step3Line" class="h-1 flex-1 bg-gray-800"></div>
-                <div id="step4Circle" class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-800 text-white font-semibold">4</div>
+            <div class="flex items-center gap-1 sm:gap-2 mb-6 sm:mb-8 overflow-x-auto">
+                <div id="step1Circle" class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-600 text-white font-semibold flex-shrink-0 text-sm sm:text-base">1</div>
+                <div id="step1Line" class="h-0.5 sm:h-1 flex-1 bg-gray-800 min-w-[20px]"></div>
+                <div id="step2Circle" class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-800 text-white font-semibold flex-shrink-0 text-sm sm:text-base">2</div>
+                <div id="step2Line" class="h-0.5 sm:h-1 flex-1 bg-gray-800 min-w-[20px]"></div>
+                <div id="step3Circle" class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-800 text-white font-semibold flex-shrink-0 text-sm sm:text-base">3</div>
+                <div id="step3Line" class="h-0.5 sm:h-1 flex-1 bg-gray-800 min-w-[20px]"></div>
+                <div id="step4Circle" class="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-800 text-white font-semibold flex-shrink-0 text-sm sm:text-base">4</div>
             </div>
 
             <!-- Step 1 -->
-            <div id="step1" class="bg-gray-900 rounded-xl p-6 space-y-4">
-                <h3 class="text-xl font-semibold mb-4">Basic Information</h3>
+            <div id="step1" class="bg-gray-900 rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4">
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Basic Information</h3>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Token Name</label>
-                    <input type="text" id="tokenName" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="My Token">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Token Name</label>
+                    <input type="text" id="tokenName" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base" placeholder="My Token">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Ticker Symbol</label>
-                    <input type="text" id="tokenTicker" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="MTK">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Ticker Symbol</label>
+                    <input type="text" id="tokenTicker" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base uppercase" placeholder="MTK">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Token Image</label>
-                    <div class="border-2 border-dashed border-gray-700 rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer">
-                        <svg class="mx-auto mb-2 text-gray-500" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                        <p class="text-sm text-gray-400">Click or drag to upload image</p>
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Token Image</label>
+                    <input type="file" id="tokenImage" accept="image/*" class="hidden">
+                    <div id="uploadArea" class="border-2 border-dashed border-gray-700 rounded-lg p-6 sm:p-8 text-center hover:border-blue-500 transition-colors cursor-pointer">
+                        <svg class="mx-auto mb-2 text-gray-500 w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        <p class="text-xs sm:text-sm text-gray-400" id="uploadText">Click to upload image</p>
+                        <img id="imagePreview" class="hidden mt-4 max-h-32 sm:max-h-48 mx-auto rounded-lg">
                     </div>
                 </div>
-                <button id="nextStep1" class="w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2">
+                <button id="nextStep1" class="w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold flex items-center justify-center gap-2 text-sm sm:text-base">
                     Next
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </button>
             </div>
 
             <!-- Step 2 -->
-            <div id="step2" class="bg-gray-900 rounded-xl p-6 space-y-4 hide">
-                <h3 class="text-xl font-semibold mb-4">Token Details</h3>
+            <div id="step2" class="bg-gray-900 rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4 hide">
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Token Details</h3>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Decimals</label>
-                    <input type="number" id="tokenDecimals" value="9" min="0" max="9" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Decimals</label>
+                    <input type="number" id="tokenDecimals" value="9" min="0" max="9" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Total Supply</label>
-                    <input type="text" id="tokenSupply" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="1000000000">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Total Supply</label>
+                    <input type="text" id="tokenSupply" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base" placeholder="1000000000">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Description</label>
-                    <textarea id="tokenDescription" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 h-32 resize-none" placeholder="Describe your token..."></textarea>
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Description</label>
+                    <textarea id="tokenDescription" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 h-24 sm:h-32 resize-none text-sm sm:text-base" placeholder="Describe your token..."></textarea>
                 </div>
                 <div class="flex gap-2">
-                    <button id="backStep2" class="flex-1 bg-gray-800 hover:bg-gray-700 rounded-lg px-6 py-3 font-semibold">Back</button>
-                    <button id="nextStep2" class="flex-1 bg-blue-600 hover:bg-blue-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2">
+                    <button id="backStep2" class="flex-1 bg-gray-800 hover:bg-gray-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold text-sm sm:text-base">Back</button>
+                    <button id="nextStep2" class="flex-1 bg-blue-600 hover:bg-blue-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold flex items-center justify-center gap-2 text-sm sm:text-base">
                         Next
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </button>
                 </div>
             </div>
 
             <!-- Step 3 -->
-            <div id="step3" class="bg-gray-900 rounded-xl p-6 space-y-4 hide">
-                <h3 class="text-xl font-semibold mb-4">Social Links (Optional)</h3>
+            <div id="step3" class="bg-gray-900 rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4 hide">
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Social Links (Optional)</h3>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Website</label>
-                    <input type="url" id="tokenWebsite" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="https://mytoken.com">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Website</label>
+                    <input type="url" id="tokenWebsite" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base" placeholder="https://mytoken.com">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Twitter</label>
-                    <input type="text" id="tokenTwitter" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="@mytoken">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Twitter</label>
+                    <input type="text" id="tokenTwitter" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base" placeholder="@mytoken">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Telegram</label>
-                    <input type="text" id="tokenTelegram" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="t.me/mytoken">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Telegram</label>
+                    <input type="text" id="tokenTelegram" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base" placeholder="t.me/mytoken">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Discord</label>
-                    <input type="text" id="tokenDiscord" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="discord.gg/mytoken">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Discord</label>
+                    <input type="text" id="tokenDiscord" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base" placeholder="discord.gg/mytoken">
                 </div>
                 <div class="flex gap-2">
-                    <button id="backStep3" class="flex-1 bg-gray-800 hover:bg-gray-700 rounded-lg px-6 py-3 font-semibold">Back</button>
-                    <button id="nextStep3" class="flex-1 bg-blue-600 hover:bg-blue-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2">
+                    <button id="backStep3" class="flex-1 bg-gray-800 hover:bg-gray-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold text-sm sm:text-base">Back</button>
+                    <button id="nextStep3" class="flex-1 bg-blue-600 hover:bg-blue-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold flex items-center justify-center gap-2 text-sm sm:text-base">
                         Next
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </button>
                 </div>
             </div>
 
             <!-- Step 4 -->
-            <div id="step4" class="bg-gray-900 rounded-xl p-6 space-y-4 hide">
-                <h3 class="text-xl font-semibold mb-4">Token Authorities</h3>
-                <div class="space-y-3">
-                    <label class="flex items-center justify-between p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
+            <div id="step4" class="bg-gray-900 rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4 hide">
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Token Authorities</h3>
+                <div class="space-y-2 sm:space-y-3">
+                    <label class="flex items-center justify-between p-3 sm:p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
                         <div>
-                            <div class="font-semibold">Revoke Freeze Authority</div>
-                            <div class="text-sm text-gray-400">Cost: 0.1 SOL</div>
+                            <div class="font-semibold text-sm sm:text-base">Revoke Freeze Authority</div>
+                            <div class="text-xs sm:text-sm text-gray-400">Cost: 0.1 SOL</div>
                         </div>
-                        <input type="checkbox" id="revokeFreeze" class="w-5 h-5">
+                        <input type="checkbox" id="revokeFreeze" class="w-4 h-4 sm:w-5 sm:h-5">
                     </label>
-                    <label class="flex items-center justify-between p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
+                    <label class="flex items-center justify-between p-3 sm:p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
                         <div>
-                            <div class="font-semibold">Revoke Mint Authority</div>
-                            <div class="text-sm text-gray-400">Cost: 0.1 SOL</div>
+                            <div class="font-semibold text-sm sm:text-base">Revoke Mint Authority</div>
+                            <div class="text-xs sm:text-sm text-gray-400">Cost: 0.1 SOL</div>
                         </div>
-                        <input type="checkbox" id="revokeMint" class="w-5 h-5">
+                        <input type="checkbox" id="revokeMint" class="w-4 h-4 sm:w-5 sm:h-5">
                     </label>
-                    <label class="flex items-center justify-between p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
+                    <label class="flex items-center justify-between p-3 sm:p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
                         <div>
-                            <div class="font-semibold">Revoke Update Authority</div>
-                            <div class="text-sm text-gray-400">Cost: 0.1 SOL</div>
+                            <div class="font-semibold text-sm sm:text-base">Revoke Update Authority</div>
+                            <div class="text-xs sm:text-sm text-gray-400">Cost: 0.1 SOL</div>
                         </div>
-                        <input type="checkbox" id="revokeUpdate" class="w-5 h-5">
+                        <input type="checkbox" id="revokeUpdate" class="w-4 h-4 sm:w-5 sm:h-5">
                     </label>
-                    <label class="flex items-center justify-between p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
+                    <label class="flex items-center justify-between p-3 sm:p-4 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-750">
                         <div>
-                            <div class="font-semibold">Modify Creator Information</div>
-                            <div class="text-sm text-gray-400">Change creator from LaunchToken | Cost: 0.1 SOL</div>
+                            <div class="font-semibold text-sm sm:text-base">Modify Creator Information</div>
+                            <div class="text-xs sm:text-sm text-gray-400">Change creator from LaunchToken | Cost: 0.1 SOL</div>
                         </div>
-                        <input type="checkbox" id="modifyCreator" class="w-5 h-5">
+                        <input type="checkbox" id="modifyCreator" class="w-4 h-4 sm:w-5 sm:h-5">
                     </label>
                 </div>
-                <div class="bg-blue-950 border border-blue-800 rounded-lg p-4 mt-6">
+                <div class="bg-blue-950 border border-blue-800 rounded-lg p-3 sm:p-4 mt-4 sm:mt-6">
                     <div class="flex items-center gap-2 text-blue-400 mb-2">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                        <span class="font-semibold">Total Cost</span>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <span class="font-semibold text-sm sm:text-base">Total Cost</span>
                     </div>
-                    <div id="totalCost" class="text-2xl font-bold">0.1 SOL</div>
-                    <div class="text-sm text-gray-400 mt-1">Base creation: 0.1 SOL</div>
+                    <div id="totalCost" class="text-xl sm:text-2xl font-bold">0.1 SOL</div>
+                    <div class="text-xs sm:text-sm text-gray-400 mt-1">Base creation: 0.1 SOL</div>
                 </div>
-                <div class="flex gap-2 mt-6">
-                    <button id="backStep4" class="flex-1 bg-gray-800 hover:bg-gray-700 rounded-lg px-6 py-3 font-semibold">Back</button>
-                    <button id="createTokenBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.6-1 5.2 2 5.2h12c3 0 3.5-3.6 2-5.2l-8-10.5z"></path></svg>
+                <div class="flex gap-2 mt-4 sm:mt-6">
+                    <button id="backStep4" class="flex-1 bg-gray-800 hover:bg-gray-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold text-sm sm:text-base">Back</button>
+                    <button id="createTokenBtn" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold flex items-center justify-center gap-2 text-sm sm:text-base">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.6-1 5.2 2 5.2h12c3 0 3.5-3.6 2-5.2l-8-10.5z"></path></svg>
                         Create Token
                     </button>
                 </div>
@@ -204,81 +243,81 @@
 
         <!-- Manage Liquidity Page -->
         <div id="liquidityPage" class="page-content hide">
-            <h2 class="text-3xl font-bold mb-6">Manage Liquidity</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Manage Liquidity</h2>
             
-            <div id="poolsContainer" class="bg-gray-900 rounded-xl p-6 mb-6 hide">
-                <h3 class="text-xl font-semibold mb-4">Your Liquidity Pools</h3>
-                <div id="poolsList" class="space-y-3"></div>
+            <div id="poolsContainer" class="bg-gray-900 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 hide">
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Your Liquidity Pools</h3>
+                <div id="poolsList" class="space-y-2 sm:space-y-3"></div>
             </div>
 
-            <div class="bg-gray-900 rounded-xl p-6 space-y-4">
-                <h3 class="text-xl font-semibold mb-4">Add Liquidity to Raydium</h3>
+            <div class="bg-gray-900 rounded-xl p-4 sm:p-6 space-y-3 sm:space-y-4">
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Add Liquidity to Raydium</h3>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-2">Select Token</label>
-                    <select id="liquidityTokenSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">Select Token</label>
+                    <select id="liquidityTokenSelect" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base">
                         <option value="">Choose a token</option>
                     </select>
                 </div>
                 <div id="liquidityInputContainer" class="hide">
-                    <label class="block text-sm text-gray-400 mb-2">SOL Amount</label>
-                    <input type="number" id="liquidityAmount" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="0.0" step="0.1">
+                    <label class="block text-xs sm:text-sm text-gray-400 mb-2">SOL Amount</label>
+                    <input type="number" id="liquidityAmount" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 focus:outline-none focus:border-blue-500 text-sm sm:text-base" placeholder="0.0" step="0.1">
                 </div>
-                <button id="addLiquidityBtn" class="w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-6 py-3 font-semibold flex items-center justify-center gap-2 hide">
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <button id="addLiquidityBtn" class="w-full bg-blue-600 hover:bg-blue-700 rounded-lg px-4 sm:px-6 py-2.5 sm:py-3 font-semibold flex items-center justify-center gap-2 hide text-sm sm:text-base">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     Add Liquidity
                 </button>
-                <div id="noTokensMessage" class="text-center py-8 text-gray-400">
-                    <svg class="mx-auto mb-3 opacity-50" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
-                    <p>No tokens created yet. Create a token first!</p>
+                <div id="noTokensMessage" class="text-center py-6 sm:py-8 text-gray-400">
+                    <svg class="mx-auto mb-3 opacity-50 w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                    <p class="text-sm sm:text-base">No tokens created yet. Create a token first!</p>
                 </div>
             </div>
         </div>
 
         <!-- Portfolio Page -->
         <div id="portfolioPage" class="page-content hide">
-            <h2 class="text-3xl font-bold mb-6">Portfolio</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Portfolio</h2>
             
-            <div id="walletInfo" class="bg-gradient-to-r from-blue-900 to-purple-900 rounded-xl p-6 mb-6 hide">
-                <div class="text-sm text-gray-300 mb-1">Wallet Address</div>
-                <div id="portfolioWallet" class="font-mono text-lg mb-4"></div>
-                <div class="text-sm text-gray-300 mb-1">Balance</div>
-                <div class="text-3xl font-bold">-- SOL</div>
+            <div id="walletInfo" class="bg-gradient-to-r from-blue-900 to-purple-900 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 hide">
+                <div class="text-xs sm:text-sm text-gray-300 mb-1">Wallet Address</div>
+                <div id="portfolioWallet" class="font-mono text-sm sm:text-lg mb-3 sm:mb-4 break-all"></div>
+                <div class="text-xs sm:text-sm text-gray-300 mb-1">Balance</div>
+                <div id="walletBalance" class="text-2xl sm:text-3xl font-bold">-- SOL</div>
             </div>
 
-            <div class="bg-gray-900 rounded-xl p-6">
-                <h3 class="text-xl font-semibold mb-4">Your Tokens</h3>
-                <div id="tokensList" class="grid gap-4 md:grid-cols-2"></div>
-                <div id="noTokensPortfolio" class="text-center py-8 text-gray-400">
-                    <svg class="mx-auto mb-3 opacity-50" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
-                    <p>No tokens in your portfolio yet</p>
+            <div class="bg-gray-900 rounded-xl p-4 sm:p-6">
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Your Tokens</h3>
+                <div id="tokensList" class="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2"></div>
+                <div id="noTokensPortfolio" class="text-center py-6 sm:py-8 text-gray-400">
+                    <svg class="mx-auto mb-3 opacity-50 w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+                    <p class="text-sm sm:text-base">No tokens in your portfolio yet</p>
                 </div>
             </div>
         </div>
 
         <!-- Trending Page -->
         <div id="trendingPage" class="page-content hide">
-            <h2 class="text-3xl font-bold mb-6">Get Trending</h2>
-            <div class="bg-gray-900 rounded-xl p-8 text-center">
-                <svg class="mx-auto mb-4 text-blue-500" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                <h3 class="text-xl font-semibold mb-4">Discover Trending Tokens</h3>
-                <p class="text-gray-400 mb-6">Check out the hottest tokens on Solana right now</p>
-                <a href="https://soltrndingding.zya.me" target="_blank" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Get Trending</h2>
+            <div class="bg-gray-900 rounded-xl p-6 sm:p-8 text-center">
+                <svg class="mx-auto mb-4 text-blue-500 w-12 h-12 sm:w-16 sm:h-16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Discover Trending Tokens</h3>
+                <p class="text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">Check out the hottest tokens on Solana right now</p>
+                <a href="https://soltrndingding.zya.me" target="_blank" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base">
                     Visit Trending Page
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                 </a>
             </div>
         </div>
 
         <!-- Support Page -->
         <div id="supportPage" class="page-content hide">
-            <h2 class="text-3xl font-bold mb-6">Support</h2>
-            <div class="bg-gray-900 rounded-xl p-8 text-center">
-                <svg class="mx-auto mb-4 text-blue-500" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg>
-                <h3 class="text-xl font-semibold mb-4">Need Help?</h3>
-                <p class="text-gray-400 mb-6">Our support team is ready to assist you with any questions or issues</p>
-                <a href="https://t.me/IceiyLaunchSupport_Bot" target="_blank" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6">Support</h2>
+            <div class="bg-gray-900 rounded-xl p-6 sm:p-8 text-center">
+                <svg class="mx-auto mb-4 text-blue-500 w-12 h-12 sm:w-16 sm:h-16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg>
+                <h3 class="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Need Help?</h3>
+                <p class="text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">Our support team is ready to assist you with any questions or issues</p>
+                <a href="https://t.me/IceiyLaunchSupport_Bot" target="_blank" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base">
                     Contact Support
-                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                 </a>
             </div>
         </div>
@@ -286,14 +325,17 @@
     </div>
 </main>
 
-<script>
+<script type="module">
     const TREASURY_ADDRESS = 'DB9YZwXgNeQByab3bgJnJKrnYP7CtZGktrdnDRCLrKA3';
+    const NFT_STORAGE_KEY = 'd53093ba.6fde78937c704e309b666e9640bc5970';
+    const SOLANA_RPC = 'https://mainnet.helius-rpc.com/?api-key=f724fecf-158e-4a19-8726-5022aea22646';
     
     let walletConnected = false;
     let walletAddress = '';
     let currentStep = 1;
     let userTokens = [];
     let userPools = [];
+    let selectedImageFile = null;
 
     // Menu toggle
     const menuBtn = document.getElementById('menuBtn');
@@ -303,13 +345,62 @@
 
     menuBtn.addEventListener('click', () => {
         sidebar.classList.toggle('-translate-x-full');
+        sidebar.classList.toggle('sidebar-open');
         menuIcon.classList.toggle('hide');
         closeIcon.classList.toggle('hide');
     });
 
+    // Image upload
+    const uploadArea = document.getElementById('uploadArea');
+    const tokenImageInput = document.getElementById('tokenImage');
+    const imagePreview = document.getElementById('imagePreview');
+    const uploadText = document.getElementById('uploadText');
+
+    uploadArea.addEventListener('click', () => tokenImageInput.click());
+
+    tokenImageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            selectedImageFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                imagePreview.classList.remove('hide');
+                uploadText.textContent = file.name;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Upload image to NFT.Storage
+    async function uploadImageToNFTStorage(file) {
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const response = await fetch('https://api.nft.storage/upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${NFT_STORAGE_KEY}`
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+            if (data.ok) {
+                return `https://ipfs.io/ipfs/${data.value.cid}`;
+            }
+            throw new Error('Upload failed');
+        } catch (error) {
+            console.error('NFT.Storage upload error:', error);
+            return null;
+        }
+    }
+
     // Wallet connection
     const walletBtn = document.getElementById('walletBtn');
     const walletText = document.getElementById('walletText');
+    const walletTextMobile = document.getElementById('walletTextMobile');
 
     walletBtn.addEventListener('click', async () => {
         if (!walletConnected) {
@@ -318,8 +409,12 @@
                     const resp = await window.solana.connect();
                     walletAddress = resp.publicKey.toString();
                     walletConnected = true;
-                    walletText.textContent = `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`;
+                    const shortAddress = `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`;
+                    walletText.textContent = shortAddress;
+                    walletTextMobile.textContent = shortAddress;
+                    await loadUserTokens();
                     updatePortfolioWallet();
+                    await getWalletBalance();
                 } catch (err) {
                     alert('Failed to connect wallet. Please try again.');
                 }
@@ -329,10 +424,59 @@
         } else {
             walletConnected = false;
             walletAddress = '';
-            walletText.textContent = 'Connect Wallet';
+            walletText.textContent = 'Connect';
+            walletTextMobile.textContent = 'Connect';
             document.getElementById('walletInfo').classList.add('hide');
         }
     });
+
+    // Get wallet balance
+    async function getWalletBalance() {
+        if (!walletConnected) return;
+        
+        try {
+            const response = await fetch(SOLANA_RPC, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    id: 1,
+                    method: 'getBalance',
+                    params: [walletAddress]
+                })
+            });
+            
+            const data = await response.json();
+            if (data.result) {
+                const balance = (data.result.value / 1e9).toFixed(4);
+                document.getElementById('walletBalance').textContent = `${balance} SOL`;
+            }
+        } catch (error) {
+            console.error('Balance fetch error:', error);
+        }
+    }
+
+    // Load user tokens from Firebase
+    async function loadUserTokens() {
+        if (!walletConnected || !window.db) return;
+        
+        try {
+            const { collection, query, where, getDocs } = window.firestoreFunctions;
+            const tokensRef = collection(window.db, 'tokens');
+            const q = query(tokensRef, where('owner', '==', walletAddress));
+            const querySnapshot = await getDocs(q);
+            
+            userTokens = [];
+            querySnapshot.forEach((doc) => {
+                userTokens.push({ docId: doc.id, ...doc.data() });
+            });
+            
+            updatePortfolio();
+            updateLiquidityPage();
+        } catch (error) {
+            console.error('Error loading tokens:', error);
+        }
+    }
 
     // Navigation
     const navItems = document.querySelectorAll('.nav-item');
@@ -353,6 +497,7 @@
             document.getElementById(`${page}Page`).classList.remove('hide');
             
             sidebar.classList.add('-translate-x-full');
+            sidebar.classList.remove('sidebar-open');
             menuIcon.classList.remove('hide');
             closeIcon.classList.add('hide');
 
@@ -370,7 +515,7 @@
             document.getElementById(`step${i}`).classList.add('hide');
             const circle = document.getElementById(`step${i}Circle`);
             if (i < step) {
-                circle.innerHTML = '<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+                circle.innerHTML = '<svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
                 circle.classList.add('bg-blue-600');
                 circle.classList.remove('bg-gray-800');
                 if (i < 4) document.getElementById(`step${i}Line`).classList.add('bg-blue-600');
@@ -393,17 +538,24 @@
         const name = document.getElementById('tokenName').value;
         const ticker = document.getElementById('tokenTicker').value;
         if (name && ticker) goToStep(2);
+        else alert('Please fill in token name and ticker');
     });
 
     document.getElementById('backStep2').addEventListener('click', () => goToStep(1));
     document.getElementById('nextStep2').addEventListener('click', () => {
         const supply = document.getElementById('tokenSupply').value;
         if (supply) goToStep(3);
+        else alert('Please enter token supply');
     });
 
     document.getElementById('backStep3').addEventListener('click', () => goToStep(2));
     document.getElementById('nextStep3').addEventListener('click', () => goToStep(4));
     document.getElementById('backStep4').addEventListener('click', () => goToStep(3));
+
+    // Make ticker uppercase
+    document.getElementById('tokenTicker').addEventListener('input', (e) => {
+        e.target.value = e.target.value.toUpperCase();
+    });
 
     // Calculate total cost
     function updateTotalCost() {
@@ -427,53 +579,93 @@
             return false;
         }
         
-        alert(`Transaction created: ${amount} SOL to ${TREASURY_ADDRESS}\n\nIn a real implementation, this would create an actual Solana transaction for user approval.`);
-        return true;
+        try {
+            // In production, implement actual Solana transaction here
+            const confirmed = confirm(`Send ${amount} SOL to ${TREASURY_ADDRESS}?\n\nThis will create a transaction in your wallet.`);
+            if (confirmed) {
+                // Simulate transaction
+                alert('Transaction would be sent here. In production, integrate @solana/web3.js');
+                return true;
+            }
+            return false;
+        } catch (error) {
+            alert('Transaction failed. Please try again.');
+            return false;
+        }
     }
 
     // Create token
     document.getElementById('createTokenBtn').addEventListener('click', async () => {
+        if (!walletConnected) {
+            alert('Please connect your wallet first');
+            return;
+        }
+
         const totalCost = updateTotalCost();
         const success = await createTransaction(totalCost);
         
         if (success) {
-            const newToken = {
-                id: Date.now(),
-                name: document.getElementById('tokenName').value,
-                ticker: document.getElementById('tokenTicker').value,
-                decimals: document.getElementById('tokenDecimals').value,
-                supply: document.getElementById('tokenSupply').value,
-                description: document.getElementById('tokenDescription').value,
-                website: document.getElementById('tokenWebsite').value,
-                twitter: document.getElementById('tokenTwitter').value,
-                telegram: document.getElementById('tokenTelegram').value,
-                discord: document.getElementById('tokenDiscord').value,
-                address: `${document.getElementById('tokenTicker').value}${Math.random().toString(36).substr(2, 9)}`,
-                hasLiquidity: false,
-                created: new Date().toISOString()
-            };
-            
-            userTokens.push(newToken);
-            alert('Token created successfully!');
-            
-            // Reset form
-            document.getElementById('tokenName').value = '';
-            document.getElementById('tokenTicker').value = '';
-            document.getElementById('tokenSupply').value = '';
-            document.getElementById('tokenDescription').value = '';
-            document.getElementById('tokenWebsite').value = '';
-            document.getElementById('tokenTwitter').value = '';
-            document.getElementById('tokenTelegram').value = '';
-            document.getElementById('tokenDiscord').value = '';
-            document.getElementById('revokeFreeze').checked = false;
-            document.getElementById('revokeMint').checked = false;
-            document.getElementById('revokeUpdate').checked = false;
-            document.getElementById('modifyCreator').checked = false;
-            
-            goToStep(1);
-            
-            // Navigate to portfolio
-            navItems[2].click();
+            try {
+                let imageUrl = null;
+                
+                // Upload image if selected
+                if (selectedImageFile) {
+                    imageUrl = await uploadImageToNFTStorage(selectedImageFile);
+                }
+
+                const tokenData = {
+                    owner: walletAddress,
+                    name: document.getElementById('tokenName').value,
+                    ticker: document.getElementById('tokenTicker').value,
+                    decimals: parseInt(document.getElementById('tokenDecimals').value),
+                    supply: document.getElementById('tokenSupply').value,
+                    description: document.getElementById('tokenDescription').value,
+                    website: document.getElementById('tokenWebsite').value,
+                    twitter: document.getElementById('tokenTwitter').value,
+                    telegram: document.getElementById('tokenTelegram').value,
+                    discord: document.getElementById('tokenDiscord').value,
+                    imageUrl: imageUrl,
+                    revokeFreeze: document.getElementById('revokeFreeze').checked,
+                    revokeMint: document.getElementById('revokeMint').checked,
+                    revokeUpdate: document.getElementById('revokeUpdate').checked,
+                    modifyCreator: document.getElementById('modifyCreator').checked,
+                    address: `${document.getElementById('tokenTicker').value}${Math.random().toString(36).substr(2, 9)}`,
+                    hasLiquidity: false,
+                    created: new Date().toISOString()
+                };
+
+                // Save to Firebase
+                const { collection, addDoc } = window.firestoreFunctions;
+                await addDoc(collection(window.db, 'tokens'), tokenData);
+                
+                alert('Token created successfully!');
+                
+                // Reset form
+                document.getElementById('tokenName').value = '';
+                document.getElementById('tokenTicker').value = '';
+                document.getElementById('tokenSupply').value = '';
+                document.getElementById('tokenDescription').value = '';
+                document.getElementById('tokenWebsite').value = '';
+                document.getElementById('tokenTwitter').value = '';
+                document.getElementById('tokenTelegram').value = '';
+                document.getElementById('tokenDiscord').value = '';
+                document.getElementById('revokeFreeze').checked = false;
+                document.getElementById('revokeMint').checked = false;
+                document.getElementById('revokeUpdate').checked = false;
+                document.getElementById('modifyCreator').checked = false;
+                selectedImageFile = null;
+                imagePreview.classList.add('hide');
+                uploadText.textContent = 'Click to upload image';
+                
+                goToStep(1);
+                await loadUserTokens();
+                
+                // Navigate to portfolio
+                navItems[2].click();
+            } catch (error) {
+                console.error('Error saving token:', error);
+                alert('Error saving token to database');
+            }
         }
     });
 
@@ -497,15 +689,18 @@
         } else {
             noTokensMsg.classList.add('hide');
             tokensList.innerHTML = userTokens.map(token => `
-                <div class="bg-gray-800 rounded-lg p-4">
-                    <div class="flex items-start justify-between mb-3">
-                        <div>
-                            <div class="font-semibold text-lg">${token.name}</div>
-                            <div class="text-gray-400">${token.ticker}</div>
+                <div class="bg-gray-800 rounded-lg p-3 sm:p-4">
+                    <div class="flex items-start justify-between mb-2 sm:mb-3">
+                        <div class="flex items-center gap-2 sm:gap-3">
+                            ${token.imageUrl ? `<img src="${token.imageUrl}" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full" alt="${token.name}">` : ''}
+                            <div>
+                                <div class="font-semibold text-sm sm:text-lg">${token.name}</div>
+                                <div class="text-gray-400 text-xs sm:text-base">${token.ticker}</div>
+                            </div>
                         </div>
-                        ${token.hasLiquidity ? '<span class="bg-green-600 text-xs px-2 py-1 rounded">Liquidity Added</span>' : ''}
+                        ${token.hasLiquidity ? '<span class="bg-green-600 text-xs px-2 py-1 rounded whitespace-nowrap">Liquidity</span>' : ''}
                     </div>
-                    <div class="text-sm text-gray-400 mb-2">Supply: ${parseInt(token.supply).toLocaleString()}</div>
+                    <div class="text-xs sm:text-sm text-gray-400 mb-1 sm:mb-2">Supply: ${parseInt(token.supply).toLocaleString()}</div>
                     <div class="text-xs text-gray-500 font-mono truncate">${token.address}</div>
                 </div>
             `).join('');
@@ -529,7 +724,7 @@
             noTokensMsg.classList.add('hide');
             userTokens.forEach(token => {
                 const option = document.createElement('option');
-                option.value = token.id;
+                option.value = token.docId;
                 option.textContent = `${token.name} (${token.ticker})`;
                 select.appendChild(option);
             });
@@ -539,13 +734,13 @@
         if (userPools.length > 0) {
             document.getElementById('poolsContainer').classList.remove('hide');
             document.getElementById('poolsList').innerHTML = userPools.map(pool => `
-                <div class="bg-gray-800 rounded-lg p-4 flex items-center justify-between">
+                <div class="bg-gray-800 rounded-lg p-3 sm:p-4 flex items-center justify-between">
                     <div>
-                        <div class="font-semibold">${pool.tokenName} (${pool.tokenTicker})</div>
-                        <div class="text-sm text-gray-400">${pool.solAmount} SOL</div>
+                        <div class="font-semibold text-sm sm:text-base">${pool.tokenName} (${pool.tokenTicker})</div>
+                        <div class="text-xs sm:text-sm text-gray-400">${pool.solAmount} SOL</div>
                     </div>
-                    <button onclick="withdrawLiquidity(${pool.id})" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg flex items-center gap-2">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <button onclick="withdrawLiquidity(${pool.id})" class="bg-red-600 hover:bg-red-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         Withdraw
                     </button>
                 </div>
@@ -571,42 +766,50 @@
 
     // Add liquidity
     document.getElementById('addLiquidityBtn').addEventListener('click', async () => {
-        const tokenId = parseInt(document.getElementById('liquidityTokenSelect').value);
+        const tokenDocId = document.getElementById('liquidityTokenSelect').value;
         const amount = parseFloat(document.getElementById('liquidityAmount').value);
         
-        if (!tokenId || !amount || amount <= 0) {
+        if (!tokenDocId || !amount || amount <= 0) {
             alert('Please select a token and enter a valid amount');
             return;
         }
         
-        const token = userTokens.find(t => t.id === tokenId);
+        const token = userTokens.find(t => t.docId === tokenDocId);
         const success = await createTransaction(amount);
         
         if (success) {
-            const newPool = {
-                id: Date.now(),
-                tokenId: token.id,
-                tokenName: token.name,
-                tokenTicker: token.ticker,
-                solAmount: amount,
-                created: new Date().toISOString()
-            };
-            
-            userPools.push(newPool);
-            
-            userTokens = userTokens.map(t => 
-                t.id === tokenId ? { ...t, hasLiquidity: true } : t
-            );
-            
-            alert('Liquidity added successfully!');
-            document.getElementById('liquidityTokenSelect').value = '';
-            document.getElementById('liquidityAmount').value = '';
-            updateLiquidityPage();
+            try {
+                const newPool = {
+                    id: Date.now(),
+                    tokenId: token.docId,
+                    tokenName: token.name,
+                    tokenTicker: token.ticker,
+                    solAmount: amount,
+                    created: new Date().toISOString()
+                };
+                
+                userPools.push(newPool);
+                
+                // Update token in Firebase
+                const { doc, updateDoc } = window.firestoreFunctions;
+                const tokenRef = doc(window.db, 'tokens', tokenDocId);
+                await updateDoc(tokenRef, { hasLiquidity: true });
+                
+                await loadUserTokens();
+                
+                alert('Liquidity added successfully!');
+                document.getElementById('liquidityTokenSelect').value = '';
+                document.getElementById('liquidityAmount').value = '';
+                updateLiquidityPage();
+            } catch (error) {
+                console.error('Error adding liquidity:', error);
+                alert('Error updating liquidity status');
+            }
         }
     });
 
     // Withdraw liquidity
-    function withdrawLiquidity(poolId) {
+    window.withdrawLiquidity = function(poolId) {
         const pool = userPools.find(p => p.id === poolId);
         if (!pool) return;
         
@@ -615,6 +818,12 @@
             alert('Liquidity withdrawn successfully!');
             updateLiquidityPage();
         }
+    };
+
+    // Initialize first nav item as active
+    if (navItems.length > 0) {
+        navItems[0].classList.add('bg-blue-600', 'text-white');
+        navItems[0].classList.remove('text-gray-300');
     }
 </script>
 ```
